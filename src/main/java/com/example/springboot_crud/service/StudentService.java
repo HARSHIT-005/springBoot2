@@ -4,6 +4,8 @@ import com.example.springboot_crud.model.StudentModel;
 import com.example.springboot_crud.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentService {
     private final StudentRepository repository;
@@ -13,5 +15,24 @@ public class StudentService {
     }
     public StudentModel addStudent(StudentModel student){
         return repository.save(student);
+    }
+    public List<StudentModel> getStudents(){
+        return repository.findAll();
+    }
+    public StudentModel updateStudent(String id,StudentModel student){
+        StudentModel existingStudent=repository.findById(id)
+                .orElseThrow(()->new RuntimeException("no students found"));
+        existingStudent.setAge(student.getAge());
+        existingStudent.setName(student.getName());
+        existingStudent.setEmail(student.getEmail());
+        return repository.save(existingStudent);
+
+    }
+    public StudentModel deleteStudent(String id){
+        StudentModel st=repository.findById(id)
+                        .orElseThrow(()->new RuntimeException("student not found"));
+
+         repository.deleteById(id);
+         return st;
     }
 }
