@@ -1,8 +1,9 @@
 package com.example.springboot_crud.controller;
 
-
+import com.example.springboot_crud.dto.StudentRequesDto;
 import com.example.springboot_crud.model.StudentModel;
 import com.example.springboot_crud.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,23 +15,32 @@ public class StudentController {
     public StudentController(StudentService service) {
         this.service = service;
     }
+
     @PostMapping("/add-student")
-    public StudentModel addStudent(@RequestBody StudentModel student){
+    public StudentModel addStudent(@Valid @RequestBody StudentRequesDto studentDto) {
+        StudentModel student = new StudentModel();
+        student.setName(studentDto.getName());
+        student.setAge(studentDto.getAge());
+        student.setEmail(studentDto.getEmail());
         return service.addStudent(student);
     }
 
     @GetMapping("/students")
-    public List<StudentModel> getStudents(){
+    public List<StudentModel> getStudents() {
         return service.getStudents();
     }
 
     @PutMapping("/update/{id}")
-    public StudentModel updateStudent(@PathVariable String id,@RequestBody StudentModel student){
-        return service.updateStudent(id,student);
+    public StudentModel updateStudent(@PathVariable String id, @Valid @RequestBody StudentRequesDto studentDto) {
+        StudentModel student = new StudentModel();
+        student.setName(studentDto.getName());
+        student.setAge(studentDto.getAge());
+        student.setEmail(studentDto.getEmail());
+        return service.updateStudent(id, student);
     }
 
     @DeleteMapping("/delete/{id}")
-    public StudentModel deleteStudent(@PathVariable String id){
+    public StudentModel deleteStudent(@PathVariable String id) {
         return service.deleteStudent(id);
     }
 }
